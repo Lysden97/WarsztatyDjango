@@ -25,5 +25,6 @@ urlpatterns = [
     path('room/new/', views.DodajSaleView.as_view(), name='dodaj_sale'),
     path('room/', views.WyswietlSaleView.as_view(), name='dostepne_sale'),
     path('room/delete/<int:pk>', views.UsunSaleView.as_view(), name='usun_sale'),
-    path('room/modify/<int:pk>', views.ModyfikacjaSaliView.as_view(), name='modyfikacja_sali')
+    path('room/modify/<int:pk>', views.ModyfikacjaSaliView.as_view(), name='modyfikacja_sali'),
+    path('room/reserve/<int:sale_id>', views.RezerwacjaView.as_view(), name='rezerwacja'),
 ]

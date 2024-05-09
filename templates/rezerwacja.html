@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block zawartosc %}
+<body>
+    <h2>Nazwa sali: {{ sale.name }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="reservation-date">Data rezerwacji</label>
+        <input type="date" id="reservation-date" name="reservation-date"
+               max="3000-12-31" min="1000-01-01" class="form-control">
+
+        <label for="comment">Komentarz</label>
+        <textarea class="form-control" id="comment" name="comment"></textarea>
+        
+        <button type="submit">Zarezerwuj</button>
+    </form>
+</body>
+{% endblock %}

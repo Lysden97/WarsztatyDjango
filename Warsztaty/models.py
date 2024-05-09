@@ -9,3 +9,11 @@ class Sale(models.Model):
 
     def __str__(self):
         return self.name
+
+class Rezerwacja(models.Model):
+    sale_id = models.ForeignKey(Sale, on_delete=models.CASCADE)
+    date = models.DateField()
+    comment = models.TextField(null=True)
+
+    class Meta:
+        unique_together = ('sale_id', 'date')

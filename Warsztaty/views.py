@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from pyexpat.errors import messages
 
-from Warsztaty.models import Sale
+from Warsztaty.models import Sale, Rezerwacja
 
+import datetime
 
 # Create your views here.
 
@@ -93,3 +94,24 @@ class ModyfikacjaSaliView(View):
        mod_sale.projector_availability = projector_availability
        mod_sale.save()
        return redirect('dostepne_sale')
+
+class RezerwacjaView(View):
+    def get(self, request, sale_id):
+        rezerwacja = Sale.objects.get(id=sale_id)
+        return render(request, 'rezerwacja.html', {'rezerwacja': rezerwacja})
+
+    def post(self, request, sale_id):
+        sale = Sale.objects.get(id=sale_id)
+        date = request.POST.get('reservation-date')
+        comment = request.POST.get('comment')
+
+        if Rezerwacja.objects.filter(sale_id=sale, date=date):
+            return render(request, 'rezerwacja.html', {'sale': sale,
+                                                       "error": "Sala jest już zarezerwowana!"})
+
+        if date < str(datetime.date.today()):
+            return render(request, "rezerwacja.html", {"sale": sale,
+                                                       "error": "Data jest z przeszłości!"})
+
+        Rezerwacja.objects.create(sale_id=sale, date=date, comment=comment)
+        return redirect('dostepne_sale')

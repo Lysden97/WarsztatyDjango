@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% block zawartosc %}
+<body>
+    <h2>Dodaj Nową Salę</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><input type="text" name="name" placeholder="Nazwa"></p>
+            {% if error_name %}
+                <p>{{ error_name }}</p>
+            {% endif %}
+            {% if error_samename %}
+                <p>{{ error_samename }}</p>
+            {% endif %}
+        <p><input type="number" name="capacity" placeholder="Pojemność"></p>
+            {% if error_value %}
+                <p>{{ error_value }}</p>
+            {% endif %}
+        <p>
+            <input type="checkbox" id="rzutnik" name="availability">
+            <label for="rzutnik">Dostępność rzutnika</label>
+        </p>
+        <button type="submit">Dodaj Salę</button>
+    </form>
+</body>
+{% endblock %}

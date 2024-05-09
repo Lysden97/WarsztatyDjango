@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% block zawartosc %}
+    <table>
+        <tr>
+            <th>Nazwa sali</th>
+            <th>Pojemność sali</th>
+            <th>Dostępność rzutnika</th>
+        </tr>
+        {% for sala in sale %}
+            <tr>
+                <td>
+                    {{ sala.name }}
+                </td>
+                <td>
+                    {{ sala.capacity }}
+                </td>
+                <td>
+                    {{ sala.availability }}
+                </td>
+        {% endfor %}
+            </tr>
+    </table>
+{% endblock %}

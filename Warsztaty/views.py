@@ -20,7 +20,7 @@ class DodajSaleView(View):
     def post(self, request):
         name = request.POST.get('name')
         capacity = request.POST.get('capacity')
-        availability = request.POST.get('availability') == 'on'
+        projector_availability = request.POST.get('projector_availability') == 'on'
 
         if not name:
             return render(request, 'dodaj_sale.html',
@@ -38,11 +38,58 @@ class DodajSaleView(View):
             return render(request, 'dodaj_sale.html',
                           {'error_samename': 'Sala o podanej nazwie już istnieje'})
 
-        Sale.objects.create(name=name, capacity=capacity, availability= availability)
+        Sale.objects.create(name=name, capacity=capacity, projector_availability= projector_availability)
 
-        return redirect('lista_sal.html')
-
-
+        return redirect('dostepne_sale')
 
 
+class WyswietlSaleView(View):
+    def get(self, request):
+       sale = Sale.objects.all()
+       return render(request, 'lista_sal.html', {'sale': sale})
 
+class UsunSaleView(View):
+    def get(self, request, pk):
+        try:
+            sala = Sale.objects.get(pk=pk)
+        except Sale.DoesNotExist:
+            return redirect('dostepne_sale')
+
+        sala.delete()
+
+        return redirect('dostepne_sale')
+
+class ModyfikacjaSaliView(View):
+    def get(self, request, pk):
+        mod_sale = Sale.objects.get(pk=pk)
+        return render(request, 'modyfikuj_sale.html', {'mod_sale': mod_sale})
+
+    def post(self, request, pk):
+       mod_sale = Sale.objects.get(pk=pk)
+       name = request.POST.get('name')
+       capacity = request.POST.get('capacity')
+       projector_availability = request.POST.get('projector_availability') == 'on'
+
+       if not name:
+           return render(request, 'modyfikuj_sale.html', {'mod_sale': mod_sale,
+                                                          'error_name': 'Nazwa sali nie może być pusta.'})
+
+       try:
+           capacity = int(capacity)
+           if capacity <=0:
+               raise ValueError
+       except ValueError:
+           return render(request, 'modyfikuj_sale.html', {'mod_sale': mod_sale,
+                                                          'error_value': 'Pojemność musi być liczbą dodatnią.'})
+
+
+       if name != mod_sale.name and Sale.objects.filter(name=name).first():
+           return render(request, 'modyfikuj_sale.html', {'mod_sale': mod_sale,
+                                                          'error_samename': 'Sala o podanej nazwie już istnieje'})
+
+
+       mod_sale.name = name
+       mod_sale.capacity = capacity
+       mod_sale.projector_availability = projector_availability
+       mod_sale.save()
+       return redirect('dostepne_sale')

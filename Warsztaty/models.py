@@ -5,7 +5,7 @@ from django.db import models
 class Sale(models.Model):
     name = models.CharField(max_length=255, unique=True)
     capacity = models.IntegerField()
-    availability = models.BooleanField(default=False)
+    projector_availability = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

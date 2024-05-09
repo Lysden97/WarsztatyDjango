@@ -1,17 +1,17 @@
 {% extends 'index.html' %}
 {% block zawartosc %}
 <body>
-    <h2>Dodaj Nową Salę</h2>
+    <h2>Edytuj salę</h2>
     <form method="post">
         {% csrf_token %}
-        <p><input type="text" name="name" placeholder="Nazwa"></p>
+        <p><input type="text" name="name" placeholder="Nazwa" value="{{ sala.name }}"></p>
             {% if error_name %}
                 <p>{{ error_name }}</p>
             {% endif %}
             {% if error_samename %}
                 <p>{{ error_samename }}</p>
             {% endif %}
-        <p><input type="number" name="capacity" placeholder="Pojemność"></p>
+        <p><input type="number" name="capacity" placeholder="Pojemność" value="{{ sala.capacity }}"></p>
             {% if error_value %}
                 <p>{{ error_value }}</p>
             {% endif %}
@@ -23,7 +23,7 @@
             >
             <label class="form-check-label" for="projector">Dostępność rzutnika</label>
         </p>
-        <button type="submit">Dodaj Salę</button>
+        <button type="submit">Edytuj salę</button>
     </form>
 </body>
 {% endblock %}

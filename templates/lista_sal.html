@@ -1,23 +1,38 @@
 {% extends 'index.html' %}
 {% block zawartosc %}
-    <table>
-        <tr>
-            <th>Nazwa sali</th>
-            <th>Pojemność sali</th>
-            <th>Dostępność rzutnika</th>
-        </tr>
-        {% for sala in sale %}
+    <h2>Lista Dostępnych Sal</h2>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <table>
+            <thead>
             <tr>
-                <td>
-                    {{ sala.name }}
-                </td>
-                <td>
-                    {{ sala.capacity }}
-                </td>
-                <td>
-                    {{ sala.availability }}
-                </td>
-        {% endfor %}
+                <th>Nazwa</th>
+                <th>Pojemność</th>
+                <th>Dostępność rzutnika</th>
+                <th>Akcje</th>
             </tr>
-    </table>
+            </thead>
+            <tbody>
+            {% for sala in sale %}
+                <tr>
+                    <td>{{ sala.name }}</td>
+                    <td>{{ sala.capacity }}</td>
+                    <td>{% if sala.projector_availability %}Tak{% else %}Nie{% endif %}</td>
+                    <td>
+                        <a href="/room/{{ sala.id }}">szczegóły</a>
+                        <a href="/room/modify/{{ sala.id }}">edytuj</a>
+                        <a href="/room/delete/{{ sala.id }}">usuń</a>
+                        <a href="/room/reserve/{{ sala.id }}">zarezerwuj</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4"></td>
+                    Brak dostępnych sal</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
